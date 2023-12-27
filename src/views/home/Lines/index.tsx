@@ -17,6 +17,10 @@ interface SeriesStore {
   [type: string]: ISeriesApi<'Line'>;
 }
 
+interface SeriesPoints {
+  [type: string]: LinePoint[];
+}
+
 const mockData =
   Array(5).fill(0).map((_, index) => `类型${index + 1}`)
     .map((type) => Array(100).fill(0).map((_, index) => ({
@@ -112,10 +116,10 @@ function Lines(props: {
       });
       lines(mockData).forEach((line) => {
         saveTypes([line[0].type]);
-        chart.addLineSeries({
+        addSeries(line[0].type, chart.addLineSeries({
           lineWidth: 2,
           color: line[0].color ?? typeColor(line[0].type),
-        }).setData(line);
+        })).setData(line);
       });
       chartRef.current = chart;
     }
@@ -125,7 +129,9 @@ function Lines(props: {
     <div ref={selfRef}></div>
     <div className={style.legends_wrapper}>
       <ul className={style.legends}>
-        {types.map((type) => <li>
+        {types.map((type) => <li onClick={() => {
+          removeSeries(type);
+        }}>
           <span style={{ backgroundColor: typeColor(type) }}></span>
           <Tooltip title={type} mouseEnterDelay={0.6}>{<span>{type}</span>}</Tooltip>
         </li>)}
