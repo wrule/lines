@@ -1,28 +1,34 @@
 import React, { useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-import { createChart } from 'lightweight-charts';
+import { IChartApi, createChart } from 'lightweight-charts';
 import style from './index.module.scss';
 
-const mockData = Array(1000).fill(0).map((_, index) => ({
+const mockData = Array(200).fill(0).map((_, index) => ({
   time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
   value: Math.random() * 100,
-}));
+})) as any;
 
 export
 function Lines(props: {
   width?: number,
   height?: number,
 }) {
-  const self = useRef<HTMLDivElement>();
+  const selfRef = useRef<HTMLDivElement>();
+  const chartRef = useRef<IChartApi>();
 
   useEffect(() => {
-    const chart = createChart(self.current, {
-      width: props.width,
-      height: props.height ?? 220,
-    });
-    const lineSeries = chart.addLineSeries();
-    lineSeries.setData(mockData);
+    if (!chartRef.current) {
+      const chart = createChart(selfRef.current, {
+        width: props.width,
+        height: props.height ?? 220,
+      });
+      const lineSeries = chart.addLineSeries({
+        color: 'red',
+      });
+      lineSeries.setData(mockData);
+      chartRef.current = chart;
+    }
   }, []);
 
-  return <div ref={self} className={style.com}></div>;
+  return <div ref={selfRef} className={style.com}></div>;
 }
