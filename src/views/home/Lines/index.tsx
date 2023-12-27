@@ -3,10 +3,21 @@ import dayjs from 'dayjs';
 import { IChartApi, createChart } from 'lightweight-charts';
 import style from './index.module.scss';
 
-const mockData = Array(200).fill(0).map((_, index) => ({
-  time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
-  value: Math.random() * 100,
-})) as any;
+interface LinePoint {
+  type: string;
+  time: string | number;
+  value?: number;
+  [key: string]: any;
+}
+
+const mockData =
+  Array(2).fill(0).map((_, index) => `类型${index + 1}`)
+    .map((type) => Array(100).fill(0).map((_, index) => ({
+      type,
+      time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
+      value: Math.random() * 100,
+    }))).flat();
+console.log(mockData);
 
 export
 function Lines(props: {
@@ -24,6 +35,7 @@ function Lines(props: {
       });
       const lineSeries = chart.addLineSeries({
         color: 'red',
+        lineWidth: 2,
       });
       lineSeries.setData(mockData);
       chartRef.current = chart;
