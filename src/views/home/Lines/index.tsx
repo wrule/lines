@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import randomColor from 'randomcolor';
@@ -24,13 +24,6 @@ const mockData: LinePoint[] =
       time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
       value: Math.random() * 100,
     }))).flat();
-console.log(lines(mockData));
-
-function lines(points: LinePoint[]) {
-  const types = Array.from(new Set(points.map((point) => point.type)));
-  types.sort();
-  return types.map((type) => points.filter((point) => point.type === type));
-}
 
 function hash(str: string) {
   let hash = 5381, i = str.length;
@@ -46,6 +39,12 @@ function uuid() {
   return hash1 + hash2 + hash3;
 }
 
+function distinct<T>(list: T[]) {
+  const result = Array.from(new Set(list));
+  result.sort();
+  return result;
+}
+
 export
 function Lines(props: {
   width?: number,
@@ -56,6 +55,10 @@ function Lines(props: {
   const selfRef = useRef<HTMLDivElement>();
   const chartRef = useRef<IChartApi>();
   const storeRef = useRef<SeriesStore>({ });
+
+  const viewTypes = useMemo(() => distinct(mockData.map((point) => point.type)), [mockData]);
+
+  const line = (type: string) => mockData.filter((point) => point.type === type);
 
   const removeSeries = (type: string) => {
     const series = storeRef.current[type];
@@ -71,7 +74,7 @@ function Lines(props: {
   };
 
   const addSeries = (type: string) => {
-    const points = mockData.filter((point) => point.type === type);
+    const points = line(type);
     if (points.length < 1) return;
     const series = chartRef.current.addLineSeries({
       lineWidth: 2,
@@ -81,6 +84,16 @@ function Lines(props: {
     removeSeries(type);
     storeRef.current[type] = series;
     return series;
+  };
+
+  const updateSeries = (type: string) => {
+    const series = storeRef.current[type];
+    if (series) series.setData(line(type));
+    else addSeries(type);
+  };
+
+  const updateLines = () => {
+    viewTypes.forEach((type) => updateSeries(type));
   };
 
   const [types, setTypes] = useState<string[]>([]);
@@ -102,10 +115,7 @@ function Lines(props: {
   };
 
   const saveTypes = (types: string[]) => {
-    const newTypes = Array.from(new Set([
-      ...readTypes(),
-      ...types,
-    ]));
+    const newTypes = distinct([...readTypes(), ...types]);
     setTypes(newTypes);
     sessionStorage.setItem(typesKey(), JSON.stringify(newTypes));
   };
@@ -118,7 +128,7 @@ function Lines(props: {
         height: props.height ?? 220,
       });
       chartRef.current = chart;
-      Array.from(new Set(mockData.map((point) => point.type))).forEach((type) => addSeries(type));
+      updateLines();
     }
   }, []);
 
