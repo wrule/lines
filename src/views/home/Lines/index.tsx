@@ -13,7 +13,7 @@ interface LinePoint {
 }
 
 const mockData =
-  Array(20).fill(0).map((_, index) => `类型${index + 1}`)
+  Array(10).fill(0).map((_, index) => `类型${index + 1}`)
     .map((type) => Array(100).fill(0).map((_, index) => ({
       type,
       time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
@@ -25,6 +25,12 @@ function lines(points: LinePoint[]) {
   const types = Array.from(new Set(points.map((point) => point.type)));
   types.sort();
   return types.map((type) => points.filter((point) => point.type === type));
+}
+
+function hash(str: string) {
+  let hash = 5381, i = str.length;
+  while (i) hash = (hash * 33) ^ str.charCodeAt(--i);
+  return hash >>> 0;
 }
 
 export
@@ -46,7 +52,8 @@ function Lines(props: {
         chart.addLineSeries({
           lineWidth: 2,
           color: line[0].color ?? randomColor({
-            seed: line[0].type,
+            luminosity: 'dark',
+            seed: hash(line[0].type),
           }),
         }).setData(line);
       });
