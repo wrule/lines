@@ -5,8 +5,8 @@ import style from './index.module.scss';
 
 interface LinePoint {
   type: string;
-  time: string | number;
-  value?: number;
+  time: string;
+  value: number;
   [key: string]: any;
 }
 
@@ -39,11 +39,11 @@ function Lines(props: {
         width: props.width,
         height: props.height ?? 220,
       });
-      const lineSeries = chart.addLineSeries({
-        color: 'red',
-        lineWidth: 2,
+      lines(mockData).forEach((line) => {
+        chart.addLineSeries({
+          lineWidth: 2,
+        }).setData(line);
       });
-      lineSeries.setData(mockData);
       chartRef.current = chart;
     }
   }, []);
