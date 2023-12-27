@@ -7,6 +7,7 @@ interface LinePoint {
   type: string;
   time: string;
   value: number;
+  color?: string;
   [key: string]: any;
 }
 
