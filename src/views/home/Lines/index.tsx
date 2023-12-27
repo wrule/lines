@@ -17,7 +17,13 @@ const mockData =
       time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
       value: Math.random() * 100,
     }))).flat();
-console.log(mockData);
+console.log(lines(mockData));
+
+function lines(points: LinePoint[]) {
+  const types = Array.from(new Set(points.map((point) => point.type)));
+  types.sort();
+  return types.map((type) => points.filter((point) => point.type === type));
+}
 
 export
 function Lines(props: {
