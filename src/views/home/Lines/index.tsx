@@ -78,7 +78,7 @@ function Lines(props: {
         height: props.height ?? 220,
       });
       lines(mockData).forEach((line) => {
-        console.log(line[0].type);
+        saveTypes([line[0].type]);
         chart.addLineSeries({
           lineWidth: 2,
           color: line[0].color ?? randomColor({
