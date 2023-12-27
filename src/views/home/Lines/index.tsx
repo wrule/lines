@@ -17,11 +17,7 @@ interface SeriesStore {
   [type: string]: ISeriesApi<'Line'>;
 }
 
-interface SeriesPoints {
-  [type: string]: LinePoint[];
-}
-
-const mockData =
+const mockData: LinePoint[] =
   Array(5).fill(0).map((_, index) => `类型${index + 1}`)
     .map((type) => Array(100).fill(0).map((_, index) => ({
       type,
@@ -74,7 +70,14 @@ function Lines(props: {
     delete storeRef.current[type];
   };
 
-  const addSeries = (type: string, series: ISeriesApi<'Line'>) => {
+  const addSeries = (type: string) => {
+    const points = mockData.filter((point) => point.type === type);
+    if (points.length < 1) return;
+    const series = chartRef.current.addLineSeries({
+      lineWidth: 2,
+      color: points[0].color ?? typeColor(points[0].type),
+    });
+    series.setData(points);
     removeSeries(type);
     storeRef.current[type] = series;
     return series;
@@ -114,14 +117,8 @@ function Lines(props: {
         width: props.width,
         height: props.height ?? 220,
       });
-      lines(mockData).forEach((line) => {
-        saveTypes([line[0].type]);
-        addSeries(line[0].type, chart.addLineSeries({
-          lineWidth: 2,
-          color: line[0].color ?? typeColor(line[0].type),
-        })).setData(line);
-      });
       chartRef.current = chart;
+      Array.from(new Set(mockData.map((point) => point.type))).forEach((type) => addSeries(type));
     }
   }, []);
 
