@@ -52,9 +52,11 @@ function Lines(props: {
   const selfRef = useRef<HTMLDivElement>();
   const chartRef = useRef<IChartApi>();
 
+  const typesKey = () => `lines-${uuidRef.current}-types`;
+
   const readTypes = () => {
     try {
-      return JSON.parse(sessionStorage.getItem(`lines-${uuidRef.current}-types`) || '[]');
+      return JSON.parse(sessionStorage.getItem(typesKey()) || '[]');
     } catch (error) {
       console.error(error);
     }
@@ -62,7 +64,7 @@ function Lines(props: {
   };
 
   const saveTypes = (types: string[]) => {
-    sessionStorage.setItem(`lines-${uuidRef.current}-types`, JSON.stringify(Array.from(new Set([
+    sessionStorage.setItem(typesKey(), JSON.stringify(Array.from(new Set([
       ...readTypes(),
       ...types,
     ]))));
