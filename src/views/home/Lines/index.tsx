@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import { IChartApi, createChart } from 'lightweight-charts';
+import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
 import randomColor from 'randomcolor';
 import style from './index.module.scss';
 import { Tooltip } from 'antd';
@@ -11,6 +11,10 @@ interface LinePoint {
   value: number;
   color?: string;
   [key: string]: any;
+}
+
+interface SeriesStore {
+  [type: string]: ISeriesApi<'Line'>;
 }
 
 const mockData =
@@ -51,6 +55,20 @@ function Lines(props: {
   const uuidRef = useRef<string>(uuid());
   const selfRef = useRef<HTMLDivElement>();
   const chartRef = useRef<IChartApi>();
+  const storeRef = useRef<SeriesStore>({ });
+
+  const removeSeries = (type: string) => {
+    const series = storeRef.current[type];
+    if (series) {
+      try {
+        chartRef.current.removeSeries(series);
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+    }
+    delete storeRef.current[type];
+  };
 
   const [types, setTypes] = useState<string[]>([]);
 
