@@ -13,7 +13,7 @@ interface LinePoint {
 }
 
 const mockData =
-  Array(10).fill(0).map((_, index) => `类型${index + 1}`)
+  Array(5).fill(0).map((_, index) => `类型${index + 1}`)
     .map((type) => Array(100).fill(0).map((_, index) => ({
       type,
       time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
