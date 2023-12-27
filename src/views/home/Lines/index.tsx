@@ -70,6 +70,11 @@ function Lines(props: {
     delete storeRef.current[type];
   };
 
+  const addSeries = (type: string, series: ISeriesApi<'Line'>) => {
+    removeSeries(type);
+    storeRef.current[type] = series;
+  };
+
   const [types, setTypes] = useState<string[]>([]);
 
   const typesKey = () => `lines-${uuidRef.current}-types`;
