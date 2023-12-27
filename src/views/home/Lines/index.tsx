@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { IChartApi, createChart } from 'lightweight-charts';
 import randomColor from 'randomcolor';
 import style from './index.module.scss';
+import { Tooltip } from 'antd';
 
 interface LinePoint {
   type: string;
@@ -61,5 +62,15 @@ function Lines(props: {
     }
   }, []);
 
-  return <div ref={selfRef} className={style.com}></div>;
+  return <div className={style.com}>
+    <div ref={selfRef}></div>
+    <div>
+      <ul className={style.legends}>
+        {Array(100).fill(0).map((_, index) => `类型2哈嘎嘎嘎嘎你好你好你好你好你好你好你好你好你好${index}`).map((type) => <li>
+          <span></span>
+          <Tooltip title={type} mouseEnterDelay={0.6}>{<span>{type}</span>}</Tooltip>
+        </li>)}
+      </ul>
+    </div>
+  </div>;
 }
