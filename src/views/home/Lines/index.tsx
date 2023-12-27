@@ -48,12 +48,28 @@ function Lines(props: {
   height?: number,
   dataSource?: LinePoint[],
 }) {
+  const uuidRef = useRef<string>(uuid());
   const selfRef = useRef<HTMLDivElement>();
   const chartRef = useRef<IChartApi>();
 
+  const readTypes = () => {
+    try {
+      return JSON.parse(sessionStorage.getItem(`lines-${uuidRef.current}-types`) || '[]');
+    } catch (error) {
+      console.error(error);
+    }
+    return [];
+  };
 
+  const saveTypes = (types: string[]) => {
+    sessionStorage.setItem(`lines-${uuidRef.current}-types`, JSON.stringify(Array.from(new Set([
+      ...readTypes(),
+      ...types,
+    ]))));
+  };
 
   useEffect(() => {
+    console.log(uuidRef);
     if (!chartRef.current) {
       const chart = createChart(selfRef.current, {
         width: props.width,
