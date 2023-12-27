@@ -38,9 +38,12 @@ export
 function Lines(props: {
   width?: number,
   height?: number,
+  dataSource?: LinePoint[],
 }) {
   const selfRef = useRef<HTMLDivElement>();
   const chartRef = useRef<IChartApi>();
+
+
 
   useEffect(() => {
     if (!chartRef.current) {
