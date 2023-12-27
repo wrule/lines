@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
 import { IChartApi, createChart } from 'lightweight-charts';
+import randomColor from 'randomcolor';
 import style from './index.module.scss';
 
 interface LinePoint {
@@ -41,8 +42,12 @@ function Lines(props: {
         height: props.height ?? 220,
       });
       lines(mockData).forEach((line) => {
+        console.log(line[0].type);
         chart.addLineSeries({
           lineWidth: 2,
+          color: line[0].color ?? randomColor({
+            seed: line[0].type,
+          }),
         }).setData(line);
       });
       chartRef.current = chart;
