@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { IChartApi, createChart } from 'lightweight-charts';
 import randomColor from 'randomcolor';
@@ -14,7 +14,7 @@ interface LinePoint {
 }
 
 const mockData =
-  Array(5).fill(0).map((_, index) => `类型${index + 1}`)
+  Array(50).fill(0).map((_, index) => `类型${index + 1}`)
     .map((type) => Array(100).fill(0).map((_, index) => ({
       type,
       time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
@@ -52,7 +52,14 @@ function Lines(props: {
   const selfRef = useRef<HTMLDivElement>();
   const chartRef = useRef<IChartApi>();
 
+  const [types, setTypes] = useState<string[]>([]);
+
   const typesKey = () => `lines-${uuidRef.current}-types`;
+
+  const typeColor = (type: string) => randomColor({
+    luminosity: 'dark',
+    seed: hash(type),
+  });
 
   const readTypes = () => {
     try {
@@ -64,10 +71,12 @@ function Lines(props: {
   };
 
   const saveTypes = (types: string[]) => {
-    sessionStorage.setItem(typesKey(), JSON.stringify(Array.from(new Set([
+    const newTypes = Array.from(new Set([
       ...readTypes(),
       ...types,
-    ]))));
+    ]));
+    setTypes(newTypes);
+    sessionStorage.setItem(typesKey(), JSON.stringify(newTypes));
   };
 
   useEffect(() => {
@@ -81,10 +90,7 @@ function Lines(props: {
         saveTypes([line[0].type]);
         chart.addLineSeries({
           lineWidth: 2,
-          color: line[0].color ?? randomColor({
-            luminosity: 'dark',
-            seed: hash(line[0].type),
-          }),
+          color: line[0].color ?? typeColor(line[0].type),
         }).setData(line);
       });
       chartRef.current = chart;
@@ -95,8 +101,8 @@ function Lines(props: {
     <div ref={selfRef}></div>
     <div className={style.legends_wrapper}>
       <ul className={style.legends}>
-        {Array(100).fill(0).map((_, index) => `类型2哈嘎嘎嘎嘎你好你好你好你好你好你好你好你好你好${index}`).map((type) => <li>
-          <span></span>
+        {types.map((type) => <li>
+          <span style={{ backgroundColor: typeColor(type) }}></span>
           <Tooltip title={type} mouseEnterDelay={0.6}>{<span>{type}</span>}</Tooltip>
         </li>)}
       </ul>
