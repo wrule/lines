@@ -56,6 +56,21 @@ function Lines(props: {
   const chartRef = useRef<IChartApi>();
   const storeRef = useRef<SeriesStore>({ });
 
+  const readTypes = () => {
+    try {
+      return JSON.parse(sessionStorage.getItem(typesKey()) || '[]');
+    } catch (error) {
+      console.error(error);
+    }
+    return [];
+  };
+
+  const saveTypes = (types: string[]) => {
+    const newTypes = distinct([...readTypes(), ...types]);
+    setTypes(newTypes);
+    sessionStorage.setItem(typesKey(), JSON.stringify(newTypes));
+  };
+
   const viewTypes = useMemo(() => distinct(mockData.map((point) => point.type)), [mockData]);
 
   const line = (type: string) => mockData.filter((point) => point.type === type);
@@ -94,6 +109,7 @@ function Lines(props: {
 
   const updateLines = () => {
     viewTypes.forEach((type) => updateSeries(type));
+    saveTypes(viewTypes);
   };
 
   const [types, setTypes] = useState<string[]>([]);
@@ -104,21 +120,6 @@ function Lines(props: {
     luminosity: 'dark',
     seed: hash(type),
   });
-
-  const readTypes = () => {
-    try {
-      return JSON.parse(sessionStorage.getItem(typesKey()) || '[]');
-    } catch (error) {
-      console.error(error);
-    }
-    return [];
-  };
-
-  const saveTypes = (types: string[]) => {
-    const newTypes = distinct([...readTypes(), ...types]);
-    setTypes(newTypes);
-    sessionStorage.setItem(typesKey(), JSON.stringify(newTypes));
-  };
 
   useEffect(() => {
     console.log(uuidRef);
