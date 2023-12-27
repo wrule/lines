@@ -73,6 +73,7 @@ function Lines(props: {
   const addSeries = (type: string, series: ISeriesApi<'Line'>) => {
     removeSeries(type);
     storeRef.current[type] = series;
+    return series;
   };
 
   const [types, setTypes] = useState<string[]>([]);
