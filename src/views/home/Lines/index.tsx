@@ -34,6 +34,14 @@ function hash(str: string) {
   return hash >>> 0;
 }
 
+function uuid() {
+  const unit = 6;
+  const hash1 = hash(Date.now().toString() + Math.random().toString()).toString().slice(0, unit).padStart(unit, '0');
+  const hash2 = hash(Math.random().toString()).toString().slice(0, unit).padStart(unit, '0');
+  const hash3 = hash(Math.random().toString()).toString().slice(0, unit).padStart(unit, '0');
+  return hash1 + hash2 + hash3;
+}
+
 export
 function Lines(props: {
   width?: number,
