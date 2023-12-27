@@ -1,7 +1,11 @@
 .com {
   font-size: 14px;
   background-color: white;
+  padding-right: 15px;
 
+  .legends_wrapper {
+    padding-bottom: 10px;
+  }
   .legends {
     display: flex;
     flex-wrap: wrap;

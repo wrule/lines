@@ -64,7 +64,7 @@ function Lines(props: {
 
   return <div className={style.com}>
     <div ref={selfRef}></div>
-    <div>
+    <div className={style.legends_wrapper}>
       <ul className={style.legends}>
         {Array(100).fill(0).map((_, index) => `类型2哈嘎嘎嘎嘎你好你好你好你好你好你好你好你好你好${index}`).map((type) => <li>
           <span></span>
