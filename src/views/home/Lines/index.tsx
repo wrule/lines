@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { DeepPartial, IChartApi, ISeriesApi, LineStyleOptions, SeriesOptionsCommon, createChart } from 'lightweight-charts';
 import randomColor from 'randomcolor';
 import style from './index.module.scss';
-import { Affix, Tooltip } from 'antd';
+import { Affix, Input, Popover, Tooltip } from 'antd';
 import filter from './filter.svg';
 
 interface LinePoint {
@@ -19,7 +19,7 @@ interface SeriesStore {
 }
 
 const mockData: LinePoint[] =
-  Array(50).fill(0).map((_, index) => `类型${index + 1}`)
+  Array(5).fill(0).map((_, index) => `类型${index + 1}`)
     .map((type) => Array(100).fill(0).map((_, index) => ({
       type,
       time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
@@ -155,7 +155,15 @@ function Lines(props: {
   return <div className={style.com}>
     <div ref={selfRef}></div>
     <div className={style.legends_wrapper}>
-      <div className={style.filter}><img src={filter} /></div>
+      <Popover
+        title="高级筛选"
+        placement="bottom"
+        trigger="click"
+        content={<div>
+          <Input placeholder="请输入名称" />
+        </div>}>
+        <div className={style.filter}><img src={filter} /></div>
+      </Popover>
       <ul className={style.legends}>
         {types.map((type) => <li
           onClick={() => {
