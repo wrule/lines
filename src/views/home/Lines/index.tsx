@@ -121,6 +121,8 @@ function Lines(props: {
   //#region allTypes处理逻辑
   const [allTypes, setAllTypes] = useState<string[]>([]);
 
+  const typesKey = () => `lines-${uuidRef.current}-types`;
+
   const readAllTypes = () => {
     try {
       return JSON.parse(sessionStorage.getItem(typesKey()) || '[]');
@@ -137,7 +139,7 @@ function Lines(props: {
   };
   //#endregion
 
-  const typesKey = () => `lines-${uuidRef.current}-types`;
+
 
   const typeColor = (type: string, alpha = 1) => randomColor({
     seed: hash(type),
