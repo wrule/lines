@@ -58,20 +58,7 @@ function Lines(props: {
   const chartRef = useRef<IChartApi>();
   const storeRef = useRef<SeriesStore>({ });
 
-  const readTypes = () => {
-    try {
-      return JSON.parse(sessionStorage.getItem(typesKey()) || '[]');
-    } catch (error) {
-      console.error(error);
-    }
-    return [];
-  };
 
-  const saveTypes = (types: string[]) => {
-    const newTypes = distinct([...readTypes(), ...types]);
-    setTypes(newTypes);
-    sessionStorage.setItem(typesKey(), JSON.stringify(newTypes));
-  };
 
   const viewTypes = useMemo(() => distinct(mockData.map((point) => point.type)), [mockData]);
 
@@ -131,7 +118,24 @@ function Lines(props: {
     saveTypes(viewTypes);
   };
 
-  const [types, setTypes] = useState<string[]>([]);
+  //#region allTypes处理逻辑
+  const [allTypes, setAllTypes] = useState<string[]>([]);
+
+  const readTypes = () => {
+    try {
+      return JSON.parse(sessionStorage.getItem(typesKey()) || '[]');
+    } catch (error) {
+      console.error(error);
+    }
+    return [];
+  };
+
+  const saveTypes = (types: string[]) => {
+    const newTypes = distinct([...readTypes(), ...types]);
+    setAllTypes(newTypes);
+    sessionStorage.setItem(typesKey(), JSON.stringify(newTypes));
+  };
+  //#endregion
 
   const typesKey = () => `lines-${uuidRef.current}-types`;
 
@@ -158,7 +162,7 @@ function Lines(props: {
     <div className={style.legends_wrapper}>
       <Filter />
       <ul className={style.legends}>
-        {types.map((type) => <li
+        {allTypes.map((type) => <li
           onClick={() => {
             removeSeries(type);
           }}
