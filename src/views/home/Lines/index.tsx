@@ -148,6 +148,19 @@ function Lines(props: {
   };
   //#endregion
 
+  //#region enabledTypes处理逻辑
+  const [enabledTypes, setEnabledTypes] = useState<string[]>([]);
+
+  const enableSeries = (types: string[], enable = true) => {
+    if (enable) {
+
+    }
+    else {
+      
+    }
+  };
+  //#endregion
+
   const typeColor = (type: string, alpha = 1) => randomColor({
     seed: hash(type),
     luminosity: 'dark',
