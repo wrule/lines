@@ -1,0 +1,23 @@
+.com {
+  position: absolute;
+  top: -4.5px;
+  right: 22px;
+  z-index: 3;
+  width: 25px;
+  height: 25px;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1.5px;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.2s;
+  cursor: pointer;
+  &:hover {
+    background-color: #dddddd;
+  }
+  img {
+    width: 16px;
+    height: 16px;
+  }
+}

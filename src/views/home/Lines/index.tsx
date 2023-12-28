@@ -5,6 +5,7 @@ import randomColor from 'randomcolor';
 import style from './index.module.scss';
 import { Affix, Input, Popover, Tooltip } from 'antd';
 import filter from './filter.svg';
+import { Filter } from './filter';
 
 interface LinePoint {
   type: string;
@@ -155,7 +156,8 @@ function Lines(props: {
   return <div className={style.com}>
     <div ref={selfRef}></div>
     <div className={style.legends_wrapper}>
-      <Popover
+      <Filter />
+      {/* <Popover
         title="高级筛选"
         placement="bottom"
         trigger="click"
@@ -163,7 +165,7 @@ function Lines(props: {
           <Input placeholder="请输入名称" />
         </div>}>
         <div className={style.filter}><img src={filter} /></div>
-      </Popover>
+      </Popover> */}
       <ul className={style.legends}>
         {types.map((type) => <li
           onClick={() => {
