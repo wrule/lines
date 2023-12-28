@@ -101,13 +101,13 @@ function Lines(props: {
     if (series) series.applyOptions(options);
   };
 
-  const highlightSeries = (types: string[], highlight = true) => {
-    viewTypes.forEach((type) => {
-      if (!types.includes(type)) updateSeriesOption(type, {
-        color: typeColor(type, highlight ? 0.1 : 1),
-      });
-    });
-  };
+  // const highlightSeries = (types: string[], highlight = true) => {
+  //   viewTypes.forEach((type) => {
+  //     if (!types.includes(type)) updateSeriesOption(type, {
+  //       color: typeColor(type, highlight ? 0.1 : 1),
+  //     });
+  //   });
+  // };
 
   const updateLines = () => {
     viewTypes.forEach((type) => updateSeries(type));
@@ -139,6 +139,15 @@ function Lines(props: {
   const viewTypes = useMemo(() => distinct(mockData.map((point) => point.type)), [mockData]);
   //#endregion
 
+  //#region highlightTypes处理逻辑
+  const [highlightTypes, setHighlightTypes] = useState<string[]>([]);
+
+  const highlightSeries = (types: string[], highlight = true) => {
+    if (highlight) setHighlightTypes(distinct([...highlightTypes, ...types]));
+    else setHighlightTypes(highlightTypes.filter((type) => !types.includes(type)));
+  };
+  //#endregion
+
   const typeColor = (type: string, alpha = 1) => randomColor({
     seed: hash(type),
     luminosity: 'dark',
@@ -167,10 +176,10 @@ function Lines(props: {
             removeSeries(type);
           }}
           onMouseEnter={() => {
-            highlightSeries([type]);
+            // highlightSeries([type]);
           }}
           onMouseLeave={() => {
-            highlightSeries([type], false);
+            // highlightSeries([type], false);
           }}>
           <span style={{ backgroundColor: typeColor(type) }}></span>
           <Tooltip title={type} mouseEnterDelay={0.6}>{<span>{type}</span>}</Tooltip>
