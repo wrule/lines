@@ -115,13 +115,13 @@ function Lines(props: {
 
   const updateLines = () => {
     viewTypes.forEach((type) => updateSeries(type));
-    saveTypes(viewTypes);
+    saveAllTypes(viewTypes);
   };
 
   //#region allTypes处理逻辑
   const [allTypes, setAllTypes] = useState<string[]>([]);
 
-  const readTypes = () => {
+  const readAllTypes = () => {
     try {
       return JSON.parse(sessionStorage.getItem(typesKey()) || '[]');
     } catch (error) {
@@ -130,10 +130,10 @@ function Lines(props: {
     return [];
   };
 
-  const saveTypes = (types: string[]) => {
-    const newTypes = distinct([...readTypes(), ...types]);
-    setAllTypes(newTypes);
+  const saveAllTypes = (types: string[]) => {
+    const newTypes = distinct([...readAllTypes(), ...types]);
     sessionStorage.setItem(typesKey(), JSON.stringify(newTypes));
+    setAllTypes(newTypes);
   };
   //#endregion
 
