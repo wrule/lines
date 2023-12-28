@@ -3,7 +3,8 @@ import dayjs from 'dayjs';
 import { DeepPartial, IChartApi, ISeriesApi, LineStyleOptions, SeriesOptionsCommon, createChart } from 'lightweight-charts';
 import randomColor from 'randomcolor';
 import style from './index.module.scss';
-import { Tooltip } from 'antd';
+import { Affix, Tooltip } from 'antd';
+import filter from './filter.svg';
 
 interface LinePoint {
   type: string;
@@ -154,6 +155,7 @@ function Lines(props: {
   return <div className={style.com}>
     <div ref={selfRef}></div>
     <div className={style.legends_wrapper}>
+      <div className={style.filter}><img src={filter} /></div>
       <ul className={style.legends}>
         {types.map((type) => <li
           onClick={() => {
