@@ -58,10 +58,6 @@ function Lines(props: {
   const chartRef = useRef<IChartApi>();
   const storeRef = useRef<SeriesStore>({ });
 
-
-
-  const viewTypes = useMemo(() => distinct(mockData.map((point) => point.type)), [mockData]);
-
   const line = (type: string) => mockData.filter((point) => point.type === type);
 
   const removeSeries = (type: string) => {
@@ -139,7 +135,9 @@ function Lines(props: {
   };
   //#endregion
 
-
+  //#region viewTypes处理逻辑
+  const viewTypes = useMemo(() => distinct(mockData.map((point) => point.type)), [mockData]);
+  //#endregion
 
   const typeColor = (type: string, alpha = 1) => randomColor({
     seed: hash(type),
