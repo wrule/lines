@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import { IChartApi, ISeriesApi, createChart } from 'lightweight-charts';
+import { DeepPartial, IChartApi, ISeriesApi, LineStyleOptions, SeriesOptionsCommon, createChart } from 'lightweight-charts';
 import randomColor from 'randomcolor';
 import style from './index.module.scss';
 import { Tooltip } from 'antd';
@@ -18,7 +18,7 @@ interface SeriesStore {
 }
 
 const mockData: LinePoint[] =
-  Array(5).fill(0).map((_, index) => `类型${index + 1}`)
+  Array(50).fill(0).map((_, index) => `类型${index + 1}`)
     .map((type) => Array(100).fill(0).map((_, index) => ({
       type,
       time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
@@ -93,6 +93,7 @@ function Lines(props: {
     if (points.length < 1) return;
     const series = chartRef.current.addLineSeries({
       lineWidth: 2,
+      lineType: 2,
       color: points[0].color ?? typeColor(points[0].type),
     });
     series.setData(points);
@@ -107,6 +108,22 @@ function Lines(props: {
     else addSeries(type);
   };
 
+  const updateSeriesOption = (
+    type: string,
+    options: DeepPartial<LineStyleOptions & SeriesOptionsCommon>,
+  ) => {
+    const series = storeRef.current[type];
+    if (series) series.applyOptions(options);
+  };
+
+  const highlightSeries = (types: string[], highlight = true) => {
+    viewTypes.forEach((type) => {
+      if (!types.includes(type)) updateSeriesOption(type, {
+        color: typeColor(type, highlight ? 0.1 : 1),
+      });
+    });
+  };
+
   const updateLines = () => {
     viewTypes.forEach((type) => updateSeries(type));
     saveTypes(viewTypes);
@@ -116,9 +133,10 @@ function Lines(props: {
 
   const typesKey = () => `lines-${uuidRef.current}-types`;
 
-  const typeColor = (type: string) => randomColor({
-    luminosity: 'dark',
+  const typeColor = (type: string, alpha = 1) => randomColor({
     seed: hash(type),
+    luminosity: 'dark',
+    alpha, format: 'rgba',
   });
 
   useEffect(() => {
@@ -137,9 +155,16 @@ function Lines(props: {
     <div ref={selfRef}></div>
     <div className={style.legends_wrapper}>
       <ul className={style.legends}>
-        {types.map((type) => <li onClick={() => {
-          removeSeries(type);
-        }}>
+        {types.map((type) => <li
+          onClick={() => {
+            removeSeries(type);
+          }}
+          onMouseEnter={() => {
+            highlightSeries([type]);
+          }}
+          onMouseLeave={() => {
+            highlightSeries([type], false);
+          }}>
           <span style={{ backgroundColor: typeColor(type) }}></span>
           <Tooltip title={type} mouseEnterDelay={0.6}>{<span>{type}</span>}</Tooltip>
         </li>)}
