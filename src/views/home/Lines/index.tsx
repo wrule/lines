@@ -157,15 +157,6 @@ function Lines(props: {
     <div ref={selfRef}></div>
     <div className={style.legends_wrapper}>
       <Filter />
-      {/* <Popover
-        title="高级筛选"
-        placement="bottom"
-        trigger="click"
-        content={<div>
-          <Input placeholder="请输入名称" />
-        </div>}>
-        <div className={style.filter}><img src={filter} /></div>
-      </Popover> */}
       <ul className={style.legends}>
         {types.map((type) => <li
           onClick={() => {
