@@ -182,7 +182,7 @@ function Lines(props: {
         },
         rightPriceScale: {
           // mode: 3,
-          textColor: 'red',
+          // textColor: 'red',
         },
       });
       chartRef.current = chart;
