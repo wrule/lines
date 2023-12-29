@@ -1,7 +1,6 @@
-import { Button, Row } from 'antd';
-import style from './index.module.scss';
-import { Lines } from './Lines';
 import { useEffect, useState } from 'react';
+import { Lines } from './Lines';
+import style from './index.module.scss';
 
 const LINE_MAX = 5;
 
