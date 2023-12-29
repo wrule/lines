@@ -105,6 +105,7 @@ function Lines(props: {
 
   const updateLines = () => {
     viewTypes.forEach((type) => updateSeries(type));
+    chartRef.current.timeScale().fitContent();
     saveAllTypes(viewTypes);
   };
 
