@@ -28,10 +28,6 @@ function Home() {
   }, [data]);
 
   return <div className={style.com}>
-    {data.length}
-    {/* <Lines /> */}
-    {/* <Row>
-      <Button type="primary">你好，世界</Button>
-    </Row> */}
+    <Lines />
   </div>;
 }
