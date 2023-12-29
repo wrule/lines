@@ -20,7 +20,7 @@ interface SeriesStore {
 }
 
 const mockData: LinePoint[] =
-  Array(5).fill(0).map((_, index) => `类型${index + 1}`)
+  Array(1).fill(0).map((_, index) => `类型${index + 1}`)
     .map((type) => Array(100).fill(0).map((_, index) => ({
       type,
       time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
@@ -156,7 +156,7 @@ function Lines(props: {
 
     }
     else {
-      
+
     }
   };
   //#endregion
@@ -173,6 +173,17 @@ function Lines(props: {
       const chart = createChart(selfRef.current, {
         width: props.width,
         height: props.height ?? 220,
+        timeScale: {
+          timeVisible: true,
+          tickMarkFormatter: (...args) => {
+            console.log(args);
+            return '55:44:88';
+          },
+        },
+        rightPriceScale: {
+          // mode: 3,
+          textColor: 'red',
+        },
       });
       chartRef.current = chart;
       updateLines();
