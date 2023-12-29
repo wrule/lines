@@ -50,7 +50,9 @@ function Lines(props: {
   const chartRef = useRef<IChartApi>();
   const storeRef = useRef<SeriesStore>({ });
 
-  const line = (type: string) => props.dataSource.filter((point) => point.type === type);
+  const dataSource = useMemo(() => props.dataSource ?? [], [props.dataSource]);
+
+  const line = (type: string) => dataSource.filter((point) => point.type === type);
 
   const removeSeries = (type: string) => {
     const series = storeRef.current[type];
@@ -128,7 +130,7 @@ function Lines(props: {
   //#endregion
 
   //#region viewTypes处理逻辑
-  const viewTypes = useMemo(() => distinct(props.dataSource.map((point) => point.type)), [props.dataSource]);
+  const viewTypes = useMemo(() => distinct(dataSource.map((point) => point.type)), [dataSource]);
   //#endregion
 
   //#region highlightTypes处理逻辑
