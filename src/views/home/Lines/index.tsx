@@ -19,14 +19,6 @@ interface SeriesStore {
   [type: string]: ISeriesApi<'Line'>;
 }
 
-const mockData: LinePoint[] =
-  Array(1).fill(0).map((_, index) => `类型${index + 1}`)
-    .map((type) => Array(100).fill(0).map((_, index) => ({
-      type,
-      time: dayjs('2023-01-01').add(index, 'days').format('YYYY-MM-DD'),
-      value: Math.random() * 100,
-    }))).flat();
-
 function hash(str: string) {
   let hash = 5381, i = str.length;
   while (i) hash = (hash * 33) ^ str.charCodeAt(--i);
@@ -58,7 +50,7 @@ function Lines(props: {
   const chartRef = useRef<IChartApi>();
   const storeRef = useRef<SeriesStore>({ });
 
-  const line = (type: string) => mockData.filter((point) => point.type === type);
+  const line = (type: string) => props.dataSource.filter((point) => point.type === type);
 
   const removeSeries = (type: string) => {
     const series = storeRef.current[type];
@@ -136,7 +128,7 @@ function Lines(props: {
   //#endregion
 
   //#region viewTypes处理逻辑
-  const viewTypes = useMemo(() => distinct(mockData.map((point) => point.type)), [mockData]);
+  const viewTypes = useMemo(() => distinct(props.dataSource.map((point) => point.type)), [props.dataSource]);
   //#endregion
 
   //#region highlightTypes处理逻辑

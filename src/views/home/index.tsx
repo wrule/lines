@@ -28,6 +28,6 @@ function Home() {
   }, [data]);
 
   return <div className={style.com}>
-    <Lines />
+    <Lines dataSource={data} />
   </div>;
 }
