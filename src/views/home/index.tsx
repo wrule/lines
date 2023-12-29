@@ -3,14 +3,12 @@ import style from './index.module.scss';
 import { Lines } from './Lines';
 import { useEffect } from 'react';
 
-const LINE_MAX = 5;
-
-function newPoints() {
+function newPoints(num = 5) {
   const time = Date.now();
-  return Array(LINE_MAX).fill(0).map((_, index) => `类型${index + 1}`)
-    .map((type) => Array(1).fill(0).map(() => ({
-      type, time, value: Math.random() * 100,
-    }))).flat();
+  return Array(num).fill(0).map((_, index) => ({
+    type: `类型${index + 1}`,
+    time, value: Math.random() * 100,
+  }));
 }
 
 export
