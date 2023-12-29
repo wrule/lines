@@ -1,5 +1,11 @@
 import { ISeriesApi } from 'lightweight-charts';
 
+interface Point {
+  type: number;
+  time: number;
+  value: number;
+}
+
 interface Line {
   series?: ISeriesApi<'Line'>;
   disabled?: boolean;
