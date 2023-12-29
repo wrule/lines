@@ -17,8 +17,8 @@ interface LinePoint {
 
 interface Line {
   series?: ISeriesApi<'Line'>;
-  enabled?: boolean;
-  highlight?: boolean;
+  disabled?: boolean;
+  obscure?: boolean;
 }
 
 interface SeriesStore {
