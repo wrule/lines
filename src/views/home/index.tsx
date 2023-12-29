@@ -29,7 +29,18 @@ function Home() {
   //   return () => clearTimeout(timer);
   // }, [data]);
 
+  useEffect(() => {
+    function includes(text: string, pattern: string | RegExp) {
+      if (pattern instanceof RegExp) return pattern.test(text);
+      try {
+        return RegExp(pattern).test(text);
+      } catch { }
+      return text.includes(pattern);
+    }
+    console.log('nshh232shj'.indexOf('23'));
+  }, []);
+
   return <div className={style.com}>
-    <Lines dataSource={data} />
+    {/* <Lines dataSource={data} /> */}
   </div>;
 }
