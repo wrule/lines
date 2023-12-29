@@ -15,6 +15,12 @@ interface LinePoint {
   [key: string]: any;
 }
 
+interface Line {
+  series?: ISeriesApi<'Line'>;
+  enabled?: boolean;
+  highlight?: boolean;
+}
+
 interface SeriesStore {
   [type: string]: ISeriesApi<'Line'>;
 }
