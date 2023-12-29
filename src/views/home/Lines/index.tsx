@@ -184,6 +184,10 @@ function Lines(props: {
     }
   }, []);
 
+  useEffect(() => {
+    updateLines();
+  }, [dataSource]);
+
   return <div className={style.com}>
     <div ref={selfRef}></div>
     <div className={style.legends_wrapper}>
